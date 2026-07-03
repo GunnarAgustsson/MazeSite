@@ -1,0 +1,49 @@
+/* win-screen.css */
+
+#win-screen {
+  background: radial-gradient(ellipse at 50% 50%, #1a2e1a 0%, var(--color-wall) 70%);
+  z-index: 60;
+}
+
+.win-inner {
+  display: flex; flex-direction: column; align-items: center;
+  gap: var(--space-l); padding: var(--space-xl);
+  text-align: center; max-width: 480px; width: 100%;
+  animation: fadeIn 0.6s var(--tile-anim-easing) both;
+}
+
+.win-title {
+  font-family: var(--font-display);
+  font-size:   clamp(var(--text-xl), 7vw, var(--text-3xl));
+  color:       #81c784;
+  text-shadow: var(--glow-win);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height:    1.1;
+}
+
+.win-subtitle { font-size: var(--text-base); color: var(--color-text-dim); }
+.win-time-label { font-size: var(--text-sm); color: var(--color-text-dim);
+                   text-transform: uppercase; letter-spacing: 0.1em; }
+
+.win-time-value {
+  font-family:    var(--font-display);
+  font-size:      clamp(var(--text-2xl), 8vw, 4rem);
+  font-weight:    bold;
+  color:          #a5d6a7;
+  text-shadow:    0 0 20px #4caf50;
+  letter-spacing: 0.05em;
+}
+
+.win-time-block {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-xs);
+  padding: var(--space-m) var(--space-xl);
+  background: rgba(27, 94, 32, 0.2);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: var(--radius-md);
+  box-shadow: var(--glow-win);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+#btn-play-again { min-width: 200px; padding: var(--space-m) var(--space-xl);
+                   font-size: var(--text-lg); margin-top: var(--space-m); }

@@ -1,0 +1,21 @@
+/* timer.css */
+
+#timer-display {
+  position: fixed;
+  top:   var(--space-m);
+  right: var(--space-m);
+  z-index: 100;
+  font-family: var(--font-display);
+  font-size:   var(--text-lg);
+  font-weight: bold;
+  color:       var(--color-accent);
+  letter-spacing: 0.06em;
+  background:  var(--color-overlay);
+  padding:     var(--space-xs) var(--space-s);
+  border:      1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  text-shadow: 0 0 8px var(--color-accent-dim);
+  pointer-events: none;
+  user-select:    none;
+  transition: opacity 0.3s;
+}

@@ -1,0 +1,17 @@
+/* settings.css */
+
+#settings-panel {
+  position: relative;
+  min-width: 220px;
+  margin-top: var(--space-s);
+  animation: fadeIn 0.2s var(--tile-anim-easing) both;
+}
+
+#settings-panel h3 {
+  font-family:    var(--font-display);
+  font-size:      var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color:          var(--color-text-dim);
+  margin-bottom:  var(--space-s);
+}

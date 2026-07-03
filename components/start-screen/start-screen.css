@@ -1,0 +1,104 @@
+/* start-screen.css — Start screen layout, dungeon styling, and leaderboard */
+
+#start-screen {
+  background: radial-gradient(ellipse at 50% 60%, #2c1f10 0%, var(--color-wall) 70%);
+  z-index: 50;
+  overflow-y: auto;
+}
+
+.start-inner {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-l);
+  padding:        var(--space-xl);
+  text-align:     center;
+  max-width:      480px;
+  width:          100%;
+}
+
+.start-title {
+  font-family:    var(--font-display);
+  font-size:      clamp(var(--text-2xl), 8vw, var(--text-3xl));
+  line-height:    1.1;
+  color:          var(--color-accent);
+  text-shadow:    var(--glow-accent), 0 2px 8px rgba(0,0,0,0.8);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  animation: torch-flicker 4s ease-in-out infinite;
+}
+
+@keyframes torch-flicker {
+  0%, 100% { text-shadow: var(--glow-accent), 0 2px 8px rgba(0,0,0,0.8); }
+  33%       { text-shadow: 0 0 8px #c8860a, 0 0 20px #7a5205; }
+  66%       { text-shadow: 0 0 18px #e09a12, 0 0 40px var(--color-accent); }
+}
+
+.start-subtitle {
+  font-size:   var(--text-base);
+  color:       var(--color-text-dim);
+  line-height: var(--lh-base);
+  max-width:   320px;
+}
+
+.start-actions {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-m);
+}
+
+#btn-start {
+  min-width: 180px;
+  padding:   var(--space-m) var(--space-xl);
+  font-size: var(--text-lg);
+}
+
+.start-rune-divider {
+  width:       100%;
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-m);
+  color:       var(--color-text-dim);
+  font-size:   var(--text-sm);
+}
+.start-rune-divider::before,
+.start-rune-divider::after {
+  content:    '';
+  flex:       1;
+  height:     1px;
+  background: var(--color-border);
+}
+
+/* ---- Leaderboard ---- */
+.leaderboard { width: 100%; max-width: 360px; }
+
+.lb-title {
+  font-family:    var(--font-display);
+  font-size:      var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color:          var(--color-text-dim);
+  margin-bottom:  var(--space-s);
+}
+
+.lb-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-xs); }
+
+.lb-row {
+  display:       flex;
+  align-items:   center;
+  gap:           var(--space-s);
+  padding:       var(--space-xs) var(--space-s);
+  border-radius: var(--radius-sm);
+  background:    rgba(255,255,255,0.03);
+}
+.lb-row:first-child {
+  background: rgba(200, 134, 10, 0.1);
+  border:     1px solid rgba(200, 134, 10, 0.25);
+}
+
+.lb-rank  { font-size: var(--text-base); width: 1.6rem; text-align: center; flex-shrink: 0; }
+.lb-time  { font-family: var(--font-display); font-size: var(--text-base); font-weight: bold;
+             color: var(--color-accent); letter-spacing: 0.05em; flex: 1; }
+.lb-date  { font-size: var(--text-sm); color: var(--color-text-dim); flex-shrink: 0; }
+.lb-empty { font-size: var(--text-sm); color: var(--color-text-dim); text-align: center;
+             padding: var(--space-s) 0; font-style: italic; }

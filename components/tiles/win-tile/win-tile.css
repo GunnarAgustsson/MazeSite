@@ -1,0 +1,5 @@
+/* win-tile.css */
+
+.win-tile {
+  animation: glow-pulse 2s ease-in-out infinite;
+}

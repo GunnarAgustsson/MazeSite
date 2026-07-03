@@ -1,0 +1,108 @@
+/* =========================================================
+   DESIGN TOKENS & GLOBAL RESET
+   ========================================================= */
+
+:root {
+  /* --- Colour palette --- */
+  --color-wall:       #1a1008;
+  --color-floor:      #2c1f10;
+  --color-floor-win:  #1a2e1a;
+  --color-accent:     #c8860a;
+  --color-accent-dim: #7a5205;
+  --color-text:       #e8d8b0;
+  --color-text-dim:   #8a7450;
+  --color-overlay:    rgba(10, 6, 2, 0.85);
+  --color-surface:    #221508;
+  --color-border:     #3a2810;
+
+  /* --- Spacing scale --- */
+  --space-xs: 0.25rem;
+  --space-s:  0.5rem;
+  --space-m:  1rem;
+  --space-l:  1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl:4rem;
+
+  /* --- Typography --- */
+  --font-display: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  --font-body:    Georgia, 'Times New Roman', serif;
+  --text-sm:      0.8rem;
+  --text-base:    1rem;
+  --text-lg:      1.25rem;
+  --text-xl:      1.75rem;
+  --text-2xl:     2.5rem;
+  --text-3xl:     3.5rem;
+  --lh-tight:     1.2;
+  --lh-base:      1.6;
+
+  /* --- Tile / corridor geometry --- */
+  --corridor-width:      40%;
+  --corridor-half:       calc(50% - (var(--corridor-width) / 2));
+  --wall-color:          var(--color-wall);
+  --floor-color:         var(--color-floor);
+
+  /* --- Animation --- */
+  --tile-anim-duration:  420ms;
+  --tile-anim-easing:    cubic-bezier(0.4, 0, 0.2, 1);
+  --bump-duration:       200ms;
+
+  /* --- Border radius --- */
+  --radius-sm: 3px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  /* --- Shadows --- */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.6);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.7);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.85);
+  --glow-win:   0 0 24px #4caf50, 0 0 48px #1b5e20;
+  --glow-accent:0 0 12px var(--color-accent);
+}
+
+/* --- Reset --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-wall);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--lh-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Screen containers --- */
+.screen {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Focus styles --- */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* --- Scrollbar (hidden globally) --- */
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
+
+/* --- Selection --- */
+::selection {
+  background: var(--color-accent);
+  color: var(--color-wall);
+}

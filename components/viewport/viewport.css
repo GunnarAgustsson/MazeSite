@@ -1,0 +1,113 @@
+/* viewport.css — 3×3 rolling tile viewport layout + player + torch decorations */
+
+#viewport-outer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#viewport-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 100vw);
+  grid-template-rows:    repeat(3, 100vh);
+  width:  300vw;
+  height: 300vh;
+  transform: translate(
+    calc(var(--tx, 1) * -100vw),
+    calc(var(--ty, 1) * -100vh)
+  );
+  will-change: transform;
+}
+
+#viewport-grid.grid-animating {
+  transition: transform var(--tile-anim-duration) var(--tile-anim-easing);
+}
+
+.tile {
+  position: relative;
+  width:  100vw;
+  height: 100vh;
+  background: var(--color-wall);
+}
+
+/* Player arrow */
+#player {
+  position: absolute;
+  top:  50%;
+  left: 50%;
+  width:  clamp(1.8rem, 5vmin, 3rem);
+  height: clamp(1.8rem, 5vmin, 3rem);
+  background: var(--color-accent);
+  clip-path: polygon(0 20%, 62% 20%, 62% 0%, 100% 50%, 62% 100%, 62% 80%, 0 80%, 24% 50%);
+  transform: translate(-50%, -50%) rotate(var(--player-rot, 0deg));
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 0 6px var(--color-accent));
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ================================================================
+   TORCH WALL DECORATIONS — dead-end alcoves
+   ================================================================ */
+
+.tile[data-tile-type^="dead-"]::before {
+  content: '';
+  position: absolute;
+  width:  clamp(0.6rem, 1.8vmin, 1.1rem);
+  height: clamp(0.9rem, 2.6vmin, 1.6rem);
+  border-radius: 50% 50% 35% 35%;
+  background: radial-gradient(ellipse at 50% 70%,
+    #fff5c0 0%, #ffb347 35%, #e05c00 70%, transparent 100%);
+  box-shadow:
+    0 0 clamp(6px,1.5vmin,12px) clamp(3px,0.8vmin,6px) #e07000,
+    0 0 clamp(12px,3vmin,24px)  clamp(6px,1.5vmin,12px) #c04000;
+  animation: torch-flicker 1.8s ease-in-out infinite;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.tile[data-tile-type="dead-n"]::before { bottom: 18%; left: 50%; transform: translateX(-50%); }
+.tile[data-tile-type="dead-s"]::before { top:    18%; left: 50%; transform: translateX(-50%); }
+.tile[data-tile-type="dead-e"]::before { left:   18%; top:  50%; transform: translateY(-50%); }
+.tile[data-tile-type="dead-w"]::before { right:  18%; top:  50%; transform: translateY(-50%); }
+
+@keyframes torch-flicker {
+  0%   { opacity: 1;    transform: translateX(-50%) scaleX(1);    }
+  15%  { opacity: 0.85; transform: translateX(-50%) scaleX(0.92); }
+  30%  { opacity: 1;    transform: translateX(-50%) scaleX(1.04); }
+  50%  { opacity: 0.9;  transform: translateX(-50%) scaleX(0.96); }
+  70%  { opacity: 1;    transform: translateX(-50%) scaleX(1.02); }
+  85%  { opacity: 0.88; transform: translateX(-50%) scaleX(0.94); }
+  100% { opacity: 1;    transform: translateX(-50%) scaleX(1);    }
+}
+.tile[data-tile-type="dead-e"]::before,
+.tile[data-tile-type="dead-w"]::before { animation-name: torch-flicker-side; }
+@keyframes torch-flicker-side {
+  0%   { opacity: 1;    transform: translateY(-50%) scaleX(1);    }
+  15%  { opacity: 0.85; transform: translateY(-50%) scaleX(0.92); }
+  30%  { opacity: 1;    transform: translateY(-50%) scaleX(1.04); }
+  50%  { opacity: 0.9;  transform: translateY(-50%) scaleX(0.96); }
+  70%  { opacity: 1;    transform: translateY(-50%) scaleX(1.02); }
+  85%  { opacity: 0.88; transform: translateY(-50%) scaleX(0.94); }
+  100% { opacity: 1;    transform: translateY(-50%) scaleX(1);    }
+}
+
+/* Player bump keyframes */
+@keyframes bump-n {
+  0%,100% { transform: translate(-50%, -50%) rotate(var(--player-rot, 0deg)); }
+  40%     { transform: translate(-50%, calc(-50% - 14px)) rotate(var(--player-rot, 0deg)); }
+}
+@keyframes bump-s {
+  0%,100% { transform: translate(-50%, -50%) rotate(var(--player-rot, 0deg)); }
+  40%     { transform: translate(-50%, calc(-50% + 14px)) rotate(var(--player-rot, 0deg)); }
+}
+@keyframes bump-e {
+  0%,100% { transform: translate(-50%, -50%) rotate(var(--player-rot, 0deg)); }
+  40%     { transform: translate(calc(-50% + 14px), -50%) rotate(var(--player-rot, 0deg)); }
+}
+@keyframes bump-w {
+  0%,100% { transform: translate(-50%, -50%) rotate(var(--player-rot, 0deg)); }
+  40%     { transform: translate(calc(-50% - 14px), -50%) rotate(var(--player-rot, 0deg)); }
+}

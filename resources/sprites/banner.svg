@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" shape-rendering="crispEdges">
+  <rect x="16" y="8" width="32" height="4" fill="#8a7450" />
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0;1 0;0 0" dur="2.2s"
+      repeatCount="indefinite" />
+    <rect x="20" y="12" width="24" height="28" fill="#6d2020" />
+    <rect x="24" y="16" width="16" height="20" fill="#8f2c2c" />
+    <rect x="28" y="20" width="8" height="8" fill="#caa053" />
+    <rect x="20" y="40" width="8" height="8" fill="#6d2020" />
+    <rect x="28" y="40" width="8" height="4" fill="#6d2020" />
+    <rect x="36" y="40" width="8" height="8" fill="#6d2020" />
+  </g>
+</svg>

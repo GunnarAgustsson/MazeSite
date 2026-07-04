@@ -36,15 +36,16 @@
   --lh-base:      1.6;
 
   /* --- Tile / corridor geometry --- */
-  --corridor-width:      40%;
+  --corridor-width:      60%;
   --corridor-half:       calc(50% - (var(--corridor-width) / 2));
   --wall-color:          var(--color-wall);
   --floor-color:         var(--color-floor);
 
   /* --- Animation --- */
-  --tile-anim-duration:  420ms;
-  --tile-anim-easing:    cubic-bezier(0.4, 0, 0.2, 1);
+  --tile-anim-duration:  500ms;
+  --tile-anim-easing:    cubic-bezier(0.34, 1.56, 0.64, 1);
   --bump-duration:       200ms;
+  --sprite-size:         64px;
 
   /* --- Border radius --- */
   --radius-sm: 3px;

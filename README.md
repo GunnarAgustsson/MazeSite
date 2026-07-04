@@ -7,10 +7,10 @@ A dungeon-themed random maze game — vanilla HTML/CSS/JS, no build step require
 Serve with any static file server (ES modules require HTTP):
 
 ```bash
-python -m http.server 8080
+python -m http.server 3000
 ```
 
-Then open **http://localhost:8080**
+Then open **http://localhost:3000**
 
 ## Controls
 
@@ -23,10 +23,12 @@ Then open **http://localhost:8080**
 ## Features
 
 - 20×20 randomly generated maze per run
-- Smooth CSS-transform viewport sliding
-- Rotating arrow player indicator
-- Flickering torch decorations on dead-end alcoves
+- Smooth CSS-transform viewport sliding — player stays fixed while rooms slide
+- Pixel-art knight player sprite with squash/stretch movement animation
+- Room themes (crypt, moss, ember, ruin) with per-chunk decoration variety
+- Flickering torches, braziers, banners, chains, shields, crates, carpets and more
+- Floor decals (moss, carpet, cracks) that stay under the player
 - Top-5 local leaderboard (localStorage)
 - Configurable timer visibility
 
-See [AGENT.md](AGENT.md) for architecture and code conventions.
+See [AGENTS.md](AGENTS.md) for architecture and code conventions.

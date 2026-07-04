@@ -1,5 +1,9 @@
 /**
- * state.js — AppState shape + localStorage settings and leaderboard persistence.
+ * state.js — AppState shape + localStorage settings persistence
+ *
+ * AppState is the single source of truth for the entire application.
+ * Modules read from and write to this object; they never maintain
+ * their own copies of application-level state.
  */
 
 export const AppState = {
@@ -9,7 +13,10 @@ export const AppState = {
   /** @type {Array<Array<{n:boolean,s:boolean,e:boolean,w:boolean,win?:boolean}>>|null} */
   maze: null,
 
+  /** Current player position in the maze grid */
   pos: { row: 0, col: 0 },
+
+  /** True while a viewport slide animation is in progress */
   transitioning: false,
 
   timer: {
@@ -23,16 +30,20 @@ export const AppState = {
   },
 };
 
+// ---- localStorage helpers -----------------------------------------------
+
 const SETTINGS_KEY    = 'mazeSite_settings_v1';
 const LEADERBOARD_KEY = 'mazeSite_leaderboard_v1';
 const MAX_SCORES      = 5;
 
+/** Persist current settings to localStorage. */
 export function saveSettings() {
   try {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(AppState.settings));
   } catch (_) { /* private browsing / storage full */ }
 }
 
+/** Load settings from localStorage; merges into AppState.settings. */
 export function loadSettings() {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
@@ -40,6 +51,8 @@ export function loadSettings() {
     Object.assign(AppState.settings, JSON.parse(raw));
   } catch (_) { /* corrupted — keep defaults */ }
 }
+
+// ---- Leaderboard helpers ------------------------------------------------
 
 /**
  * @typedef {{ms: number, date: string}} ScoreEntry

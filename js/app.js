@@ -1,14 +1,21 @@
 /**
  * app.js — Bootstrap, screen management, and high-level game lifecycle.
+ *
+ * Dependency order (loaded before this module):
+ *   state.js → maze-generator.js → navigation.js → input.js
+ *   viewport.js → timer.js → start-screen.js → win-screen.js
  */
 
 import { AppState, loadSettings } from './state.js';
 import { generateMaze }           from './maze-generator.js';
+import { decorateMaze }           from './decorations.js';
 import * as viewport               from '../components/viewport/viewport.js';
 import * as timer                  from '../components/timer/timer.js';
 import * as startScreen            from '../components/start-screen/start-screen.js';
 import * as winScreen              from '../components/win-screen/win-screen.js';
 import * as input                  from './input.js';
+
+// ---- Screen map --------------------------------------------------------
 
 const SCREENS = {
   start: document.getElementById('start-screen'),
@@ -32,12 +39,15 @@ export function showScreen(name) {
   }
 }
 
+// ---- Game lifecycle ----------------------------------------------------
+
 /** Called by start-screen when the player presses "Start". */
 export function startGame() {
   const ROWS = 20;
   const COLS = 20;
 
   AppState.maze = generateMaze(ROWS, COLS);
+  decorateMaze(AppState.maze);
   AppState.pos  = { row: 0, col: 0 };
   AppState.transitioning = false;
 
@@ -53,7 +63,7 @@ export function startGame() {
 }
 
 /**
- * Called when the player reaches the win tile.
+ * Called by navigation.js when the player reaches the win tile.
  * @param {number} elapsedMs
  */
 export function endGame(elapsedMs) {
@@ -68,9 +78,12 @@ export function restartGame() {
   startGame();
 }
 
+// ---- Bootstrap ---------------------------------------------------------
+
 function init() {
   loadSettings();
 
+  /* Hide game and win screens on load */
   SCREENS.game?.classList.add('screen-hidden');
   SCREENS.win?.classList.add('screen-hidden');
 

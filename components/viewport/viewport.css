@@ -1,4 +1,4 @@
-/* viewport.css — 3×3 rolling tile viewport layout + player + torch decorations */
+/* viewport.css — 3×3 rolling tile viewport layout */
 
 #viewport-outer {
   position: fixed;
@@ -8,6 +8,19 @@
   overflow: hidden;
 }
 
+/*
+  The grid is 3 columns × 3 rows, each cell 100vw × 100vh.
+  Total size: 300vw × 300vh.
+
+  --tx and --ty are integers in [0, 2].
+  We shift by -(value * 100vw/vh) so that:
+    --tx=0 → leftmost column visible
+    --tx=1 → centre column visible  (default / player position)
+    --tx=2 → rightmost column visible
+
+  During animation the grid slides to show the next tile,
+  then snaps back to centre while tile content is rebuilt.
+*/
 #viewport-grid {
   display: grid;
   grid-template-columns: repeat(3, 100vw);
@@ -21,10 +34,12 @@
   will-change: transform;
 }
 
+/* Animate sliding transition */
 #viewport-grid.grid-animating {
   transition: transform var(--tile-anim-duration) var(--tile-anim-easing);
 }
 
+/* Individual tile cells */
 .tile {
   position: relative;
   width:  100vw;
@@ -32,82 +47,62 @@
   background: var(--color-wall);
 }
 
-/* Player arrow */
+/* Player sprite is fixed to viewport centre while maze tiles move */
 #player {
   position: absolute;
   top:  50%;
   left: 50%;
-  width:  clamp(1.8rem, 5vmin, 3rem);
-  height: clamp(1.8rem, 5vmin, 3rem);
-  background: var(--color-accent);
-  clip-path: polygon(0 20%, 62% 20%, 62% 0%, 100% 50%, 62% 100%, 62% 80%, 0 80%, 24% 50%);
-  transform: translate(-50%, -50%) rotate(var(--player-rot, 0deg));
+  width:  var(--sprite-size);
+  height: var(--sprite-size);
+
+  transform: translate(-50%, -50%);
   transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
-  filter: drop-shadow(0 0 6px var(--color-accent));
+
+  filter: drop-shadow(0 0 6px rgba(224, 162, 75, 0.6));
   z-index: 10;
   pointer-events: none;
 }
 
+.player-sprite {
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
 /* ================================================================
-   TORCH WALL DECORATIONS — dead-end alcoves
+   PLAYER MOVEMENT — squash/stretch rubber-band effect
+   Plays for the duration of the tile slide so the character
+   compresses on launch, stretches at peak velocity, then springs
+   back to rest — matching the spring easing of the viewport grid.
    ================================================================ */
 
-.tile[data-tile-type^="dead-"]::before {
-  content: '';
-  position: absolute;
-  width:  clamp(0.6rem, 1.8vmin, 1.1rem);
-  height: clamp(0.9rem, 2.6vmin, 1.6rem);
-  border-radius: 50% 50% 35% 35%;
-  background: radial-gradient(ellipse at 50% 70%,
-    #fff5c0 0%, #ffb347 35%, #e05c00 70%, transparent 100%);
-  box-shadow:
-    0 0 clamp(6px,1.5vmin,12px) clamp(3px,0.8vmin,6px) #e07000,
-    0 0 clamp(12px,3vmin,24px)  clamp(6px,1.5vmin,12px) #c04000;
-  animation: torch-flicker 1.8s ease-in-out infinite;
-  z-index: 5;
-  pointer-events: none;
+@keyframes player-move {
+  0%   { transform: translate(-50%, -50%) scale(1,    1);    }
+  20%  { transform: translate(-50%, -50%) scale(0.72, 1.28); }
+  55%  { transform: translate(-50%, -50%) scale(1.22, 0.82); }
+  80%  { transform: translate(-50%, -50%) scale(0.96, 1.04); }
+  100% { transform: translate(-50%, -50%) scale(1,    1);    }
 }
 
-.tile[data-tile-type="dead-n"]::before { bottom: 18%; left: 50%; transform: translateX(-50%); }
-.tile[data-tile-type="dead-s"]::before { top:    18%; left: 50%; transform: translateX(-50%); }
-.tile[data-tile-type="dead-e"]::before { left:   18%; top:  50%; transform: translateY(-50%); }
-.tile[data-tile-type="dead-w"]::before { right:  18%; top:  50%; transform: translateY(-50%); }
-
-@keyframes torch-flicker {
-  0%   { opacity: 1;    transform: translateX(-50%) scaleX(1);    }
-  15%  { opacity: 0.85; transform: translateX(-50%) scaleX(0.92); }
-  30%  { opacity: 1;    transform: translateX(-50%) scaleX(1.04); }
-  50%  { opacity: 0.9;  transform: translateX(-50%) scaleX(0.96); }
-  70%  { opacity: 1;    transform: translateX(-50%) scaleX(1.02); }
-  85%  { opacity: 0.88; transform: translateX(-50%) scaleX(0.94); }
-  100% { opacity: 1;    transform: translateX(-50%) scaleX(1);    }
-}
-.tile[data-tile-type="dead-e"]::before,
-.tile[data-tile-type="dead-w"]::before { animation-name: torch-flicker-side; }
-@keyframes torch-flicker-side {
-  0%   { opacity: 1;    transform: translateY(-50%) scaleX(1);    }
-  15%  { opacity: 0.85; transform: translateY(-50%) scaleX(0.92); }
-  30%  { opacity: 1;    transform: translateY(-50%) scaleX(1.04); }
-  50%  { opacity: 0.9;  transform: translateY(-50%) scaleX(0.96); }
-  70%  { opacity: 1;    transform: translateY(-50%) scaleX(1.02); }
-  85%  { opacity: 0.88; transform: translateY(-50%) scaleX(0.94); }
-  100% { opacity: 1;    transform: translateY(-50%) scaleX(1);    }
+#player.is-moving {
+  animation: player-move var(--tile-anim-duration) ease-out;
 }
 
-/* Player bump keyframes */
 @keyframes bump-n {
-  0%,100% { transform: translate(-50%, -50%) rotate(var(--player-rot, 0deg)); }
-  40%     { transform: translate(-50%, calc(-50% - 14px)) rotate(var(--player-rot, 0deg)); }
+  0%,100% { transform: translate(-50%, -50%); }
+  40%     { transform: translate(-50%, calc(-50% - 14px)); }
 }
 @keyframes bump-s {
-  0%,100% { transform: translate(-50%, -50%) rotate(var(--player-rot, 0deg)); }
-  40%     { transform: translate(-50%, calc(-50% + 14px)) rotate(var(--player-rot, 0deg)); }
+  0%,100% { transform: translate(-50%, -50%); }
+  40%     { transform: translate(-50%, calc(-50% + 14px)); }
 }
 @keyframes bump-e {
-  0%,100% { transform: translate(-50%, -50%) rotate(var(--player-rot, 0deg)); }
-  40%     { transform: translate(calc(-50% + 14px), -50%) rotate(var(--player-rot, 0deg)); }
+  0%,100% { transform: translate(-50%, -50%); }
+  40%     { transform: translate(calc(-50% + 14px), -50%); }
 }
 @keyframes bump-w {
-  0%,100% { transform: translate(-50%, -50%) rotate(var(--player-rot, 0deg)); }
-  40%     { transform: translate(calc(-50% - 14px), -50%) rotate(var(--player-rot, 0deg)); }
+  0%,100% { transform: translate(-50%, -50%); }
+  40%     { transform: translate(calc(-50% - 14px), -50%); }
 }
